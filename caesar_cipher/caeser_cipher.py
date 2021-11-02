@@ -79,4 +79,11 @@ def crack(encrypted):
         text = decrypt(encrypted,i)
         percentage = int(count_words(text) / len(encrypted.split()) * 100)
         if percentage > 50:
-            return text
+            text= text
+
+
+    return text
+
+
+if __name__=='__main__':
+    pass
