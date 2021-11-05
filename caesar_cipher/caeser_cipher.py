@@ -2,8 +2,9 @@ import nltk
 import re
 from nltk.corpus import words, names
 
+import re
 def encrypt(text,k):
-
+    text=text.lower()
     if k > 25 :
         if k % 25 == 0 :
             k = 25
@@ -16,6 +17,10 @@ def encrypt(text,k):
     for words in arr_text:
         text_after_encrypt = ''
         for litters in words:
+            if re.match('\W',litters):
+                print(litters)
+                text_after_encrypt+=litters
+                break
             if ord(litters) + k > 122 :
                 k = k - 26
             text_after_encrypt += chr(ord(litters)+k)
@@ -24,7 +29,7 @@ def encrypt(text,k):
         new_array.append(' ')
     last_string = ''
     last_string = last_string.join(new_array)
-    return last_string
+    return last_string.strip()
 
 
 
@@ -42,6 +47,9 @@ def decrypt(text,k):
     for words in arr_text:
         text_after_encrypt = ''
         for litters in words:
+            if re.match('\W',litters):
+                text_after_encrypt+=litters
+                break
             if ord(litters) - k < 97 :
                 k =  k - 26 
             text_after_encrypt += chr(ord(litters)-k)
@@ -50,7 +58,7 @@ def decrypt(text,k):
         new_array.append(' ')
     last_string = ''
     last_string = last_string.join(new_array)
-    return last_string
+    return last_string.strip()
 
 
 nltk.download('words', quiet=True)
@@ -59,8 +67,8 @@ nltk.download('names', quiet=True)
 
 word_list = words.words()
 name_list = names.words()
-print(word_list)
-print(name_list)
+# print(word_list)
+# print(name_list)
 
 
 
@@ -87,3 +95,5 @@ def crack(encrypted):
 
 if __name__=='__main__':
     pass
+
+print(crack("bs vzr sgd adrs ne shldrE hs vzr sgd vnqrs ne shldrG"))
