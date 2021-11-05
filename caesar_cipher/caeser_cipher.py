@@ -1,0 +1,99 @@
+import nltk
+import re
+from nltk.corpus import words, names
+
+import re
+def encrypt(text,k):
+    text=text.lower()
+    if k > 25 :
+        if k % 25 == 0 :
+            k = 25
+        else :
+            k = k - (25 *(k // 25))
+    origin_k = k
+
+    new_array=[]
+    arr_text = text.split(' ')
+    for words in arr_text:
+        text_after_encrypt = ''
+        for litters in words:
+            if re.match('\W',litters):
+                print(litters)
+                text_after_encrypt+=litters
+                break
+            if ord(litters) + k > 122 :
+                k = k - 26
+            text_after_encrypt += chr(ord(litters)+k)
+            k = origin_k
+        new_array.append(text_after_encrypt)
+        new_array.append(' ')
+    last_string = ''
+    last_string = last_string.join(new_array)
+    return last_string.strip()
+
+
+
+def decrypt(text,k):
+
+    if k > 25 :
+        if k % 25 == 0 :
+            k = 25
+        else :
+            k = k - (25 *(k // 25))
+    origin_k = k
+
+    new_array=[]
+    arr_text = text.split(' ')
+    for words in arr_text:
+        text_after_encrypt = ''
+        for litters in words:
+            if re.match('\W',litters):
+                text_after_encrypt+=litters
+                break
+            if ord(litters) - k < 97 :
+                k =  k - 26 
+            text_after_encrypt += chr(ord(litters)-k)
+            k = origin_k
+        new_array.append(text_after_encrypt)
+        new_array.append(' ')
+    last_string = ''
+    last_string = last_string.join(new_array)
+    return last_string.strip()
+
+
+nltk.download('words', quiet=True)
+nltk.download('names', quiet=True)
+
+
+word_list = words.words()
+name_list = names.words()
+# print(word_list)
+# print(name_list)
+
+
+
+def count_words(text):
+    candidate_words = text.split()
+    count = 0
+    for i in candidate_words:
+        word = re.sub(r'[^A-Za-z]+','', i)
+        if word.lower() in word_list or word in name_list:
+            count += 1
+
+    return count
+
+def crack(encrypted):
+    for i in range (0,26):
+        text = decrypt(encrypted,i)
+        percentage = int(count_words(text) / len(encrypted.split()) * 100)
+        if percentage > 50:
+            text= text
+
+
+    return text
+
+
+if __name__=='__main__':
+    pass
+
+print(crack("bs vzr sgd adrs ne shldrE hs vzr sgd vnqrs ne shldrG"))
